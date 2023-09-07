@@ -4,7 +4,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette_wtf import CSRFProtectMiddleware
 
-from .. import constants
+from . import constants
 from .routes import router
 from .settings import settings
 

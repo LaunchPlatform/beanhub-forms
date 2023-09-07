@@ -2,12 +2,16 @@ import json
 import typing
 import urllib.parse
 
+import yaml
 from fastapi import Depends
+from pydantic import parse_obj_as
 from starlette.requests import Request
 from starlette.templating import Jinja2Templates
 from starlette_wtf.csrf import csrf_token
 
-from .. import constants
+from . import constants
+from ..data_types.form import FormSchema
+from .settings import settings
 
 
 def get_url_for(request: Request) -> typing.Callable:
@@ -68,6 +72,16 @@ def get_templates(
     return templates
 
 
+def get_form_schema() -> FormSchema | None:
+    form_doc_path = settings.BEANCOUNT_DIR / ".beanhub" / "forms.yaml"
+    if not form_doc_path.exists():
+        return
+    with form_doc_path.open("rt") as fo:
+        payload = yaml.safe_load(fo)
+        return parse_obj_as(FormSchema, payload)
+
+
 Jinja2TemplatesDep = typing.Annotated[Jinja2Templates, Depends(get_templates)]
 FlashDep = typing.Annotated[typing.Callable[[str, str, bool], None], Depends(get_flash)]
 UrlForDep = typing.Annotated[typing.Callable, Depends(get_url_for)]
+FormSchemaDep = typing.Annotated[FormSchema | None, Depends(get_form_schema)]
