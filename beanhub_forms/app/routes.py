@@ -7,6 +7,7 @@ from fastapi import status
 from . import deps
 from ..form import make_custom_form
 from .helpers import convert_fields_for_js
+from .processor import process_form
 
 router = APIRouter()
 
@@ -48,9 +49,12 @@ async def submit_form(
         files=[],
     )
     form = await CustomForm.from_formdata(request)
-    fields = convert_fields_for_js(form=form, form_schema=form_schema)
     if await form.validate_on_submit():
-        pass
+        form_data = form.data.copy()
+        del form_data["csrf_token"]
+        updated_files = process_form(form_schema=form_schema, form_data=form_data)
+        # TODO: format files
+    fields = convert_fields_for_js(form=form, form_schema=form_schema)
     return templates.TemplateResponse(
         "form.html",
         dict(
