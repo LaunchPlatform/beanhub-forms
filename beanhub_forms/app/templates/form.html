@@ -4,7 +4,6 @@
   Form - {{ form_schema.name }}
 {% endblock %}
 
-
 {% block css %}
   <link href="{{ url_for('static', path='vendor/bootstrap-datepicker/css/bootstrap-datepicker.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', path='vendor/select2/css/select2.min.css') }}" rel="stylesheet">
@@ -52,5 +51,6 @@
 {% endblock js %}
 
 {% block content %}
+  <h2>Form - {{ form_schema.name }}</h2>
   <div id="custom-form"></div>
 {% endblock content %}
