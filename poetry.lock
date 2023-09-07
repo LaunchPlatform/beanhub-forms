@@ -21,6 +21,49 @@ test = ["anyio[trio]", "coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "mock (>=
 trio = ["trio (<0.22)"]
 
 [[package]]
+name = "beancount-black"
+version = "0.2.1"
+description = "Opinioned code formatter, just like Python's black code formatter but for Beancount"
+optional = false
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "beancount_black-0.2.1-py3-none-any.whl", hash = "sha256:1ca4f16bacd28e932f65de7318e06af8a16b43096264117bc39ee53882abd970"},
+    {file = "beancount_black-0.2.1.tar.gz", hash = "sha256:bcc54620ddf27b460adf842602a80c0fc626c7f7574c0aed941090de047ab742"},
+]
+
+[package.dependencies]
+beancount-parser = ">=0.2.0,<0.3.0"
+click = ">=7.0.0,<9.0.0"
+
+[[package]]
+name = "beancount-parser"
+version = "0.2.0"
+description = "Standalone Lark based Beancount syntax parser (not relying on Beancount library), MIT license"
+optional = false
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "beancount_parser-0.2.0-py3-none-any.whl", hash = "sha256:9f5895cfde5d631d0335f09ccd88edef450701d4ff4a06ecc02d48c5e1932c38"},
+    {file = "beancount_parser-0.2.0.tar.gz", hash = "sha256:acf5a02ad807a3b8c5385761569919e886cceb59e89d0173d648fe3a87280082"},
+]
+
+[package.dependencies]
+lark = ">=1.1.2,<2.0.0"
+
+[[package]]
+name = "click"
+version = "8.1.7"
+description = "Composable command line interface toolkit"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "click-8.1.7-py3-none-any.whl", hash = "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28"},
+    {file = "click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -100,6 +143,23 @@ MarkupSafe = ">=2.0"
 
 [package.extras]
 i18n = ["Babel (>=2.7)"]
+
+[[package]]
+name = "lark"
+version = "1.1.7"
+description = "a modern parsing library"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "lark-1.1.7-py3-none-any.whl", hash = "sha256:9e5dc5bbf93fa1840083707285262514a0ef8a6613874af7ea1cec60468d6e92"},
+    {file = "lark-1.1.7.tar.gz", hash = "sha256:be7437bf1f37ab08b355f29ff2571d77d777113d0a8c4352b0c513dced6c5a1e"},
+]
+
+[package.extras]
+atomic-cache = ["atomicwrites"]
+interegular = ["interegular (>=0.3.1,<0.4.0)"]
+nearley = ["js2py"]
+regex = ["regex"]
 
 [[package]]
 name = "markupsafe"
@@ -437,4 +497,4 @@ server = ["fastapi", "jinja2"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "14fa65e0272ea20d8b6e1afcd76db21dc7e78247a98dd087386d38bff3400bda"
+content-hash = "bf7774757bbc44e369834cc28c71c2478227ebd0773990655d8afd3c722ee82e"

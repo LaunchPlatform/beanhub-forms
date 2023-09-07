@@ -1,5 +1,8 @@
+import io
 import logging
 
+from beancount_black.formatter import Formatter
+from beancount_parser.parser import make_parser
 from fastapi import APIRouter
 from fastapi import HTTPException
 from fastapi import Request
@@ -61,11 +64,18 @@ async def submit_form(
         logger.info("Processing form %s ...", form_schema.name)
         try:
             updated_files = process_form(form_schema=form_schema, form_data=form_data)
+            parser = make_parser()
+            formatter = Formatter()
+            for updated_file in updated_files:
+                tree = parser.parse(updated_file.read_text())
+                output_file = io.StringIO()
+                formatter.format(tree, output_file)
+                updated_file.write_text(output_file.getvalue())
         except ProcessError as exc:
             errors.extend(exc.errors)
         except RenderError as exc:
             errors.append(exc.message)
-        # TODO: format files
+        flash("Submitted form successfully", "success")
     fields = convert_fields_for_js(form=form, form_schema=form_schema)
     return templates.TemplateResponse(
         "form.html",
