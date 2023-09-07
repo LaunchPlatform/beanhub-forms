@@ -1,8 +1,8 @@
-{% if form_schema is none %}
-  <p>No form schema found</p>
+{% if form_doc is none %}
+  <p>No form definitions found</p>
 {% else %}
   <ul>
-    {% for form in form_schema.forms %}
+    {% for form in form_doc.forms %}
     <li>{{ form.name }}</li>
     {% endfor %}
   </ul>

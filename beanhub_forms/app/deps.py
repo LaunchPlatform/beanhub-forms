@@ -10,7 +10,7 @@ from starlette.templating import Jinja2Templates
 from starlette_wtf.csrf import csrf_token
 
 from . import constants
-from ..data_types.form import FormSchema
+from ..data_types.form import FormDoc
 from .settings import settings
 
 
@@ -72,16 +72,16 @@ def get_templates(
     return templates
 
 
-def get_form_schema() -> FormSchema | None:
+def get_form_doc() -> FormDoc | None:
     form_doc_path = settings.BEANCOUNT_DIR / ".beanhub" / "forms.yaml"
     if not form_doc_path.exists():
         return
     with form_doc_path.open("rt") as fo:
         payload = yaml.safe_load(fo)
-        return parse_obj_as(FormSchema, payload)
+        return parse_obj_as(FormDoc, payload)
 
 
 Jinja2TemplatesDep = typing.Annotated[Jinja2Templates, Depends(get_templates)]
 FlashDep = typing.Annotated[typing.Callable[[str, str, bool], None], Depends(get_flash)]
 UrlForDep = typing.Annotated[typing.Callable, Depends(get_url_for)]
-FormSchemaDep = typing.Annotated[FormSchema | None, Depends(get_form_schema)]
+FormDocDep = typing.Annotated[FormDoc | None, Depends(get_form_doc)]

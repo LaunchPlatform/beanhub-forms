@@ -9,5 +9,8 @@ class Settings(BaseSettings):
     SESSION_MAX_AGE: int = 14 * 24 * 60 * 60  # 14 days, in seconds
     BEANCOUNT_DIR: pathlib.Path = pathlib.Path.cwd()
 
+    class Config:
+        case_sensitive = True
+
 
 settings = Settings()
