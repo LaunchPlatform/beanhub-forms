@@ -28,7 +28,7 @@
     const accounts = []
     const currencies = []
     const fields = {{ fields | tojson }}
-    const errors = []
+    const errors = {{ errors | tojson }}
 
     $(function () {
         renderCustomForm(document.getElementById("custom-form"), {

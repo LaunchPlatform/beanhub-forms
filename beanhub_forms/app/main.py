@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware import Middleware
@@ -7,6 +9,8 @@ from starlette_wtf import CSRFProtectMiddleware
 from . import constants
 from .routes import router
 from .settings import settings
+
+logging.basicConfig(level=logging.INFO if not settings.DEBUG_LOG else logging.DEBUG)
 
 
 def make_app() -> FastAPI:

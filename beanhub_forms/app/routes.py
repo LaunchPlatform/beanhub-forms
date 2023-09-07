@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter
 from fastapi import HTTPException
 from fastapi import Request
@@ -8,8 +10,11 @@ from . import deps
 from ..form import make_custom_form
 from .helpers import convert_fields_for_js
 from .processor import process_form
+from .processor import ProcessError
+from .processor import RenderError
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/")
@@ -49,10 +54,17 @@ async def submit_form(
         files=[],
     )
     form = await CustomForm.from_formdata(request)
+    errors: list[str] = []
     if await form.validate_on_submit():
         form_data = form.data.copy()
         del form_data["csrf_token"]
-        updated_files = process_form(form_schema=form_schema, form_data=form_data)
+        logger.info("Processing form %s ...", form_schema.name)
+        try:
+            updated_files = process_form(form_schema=form_schema, form_data=form_data)
+        except ProcessError as exc:
+            errors.extend(exc.errors)
+        except RenderError as exc:
+            errors.append(exc.message)
         # TODO: format files
     fields = convert_fields_for_js(form=form, form_schema=form_schema)
     return templates.TemplateResponse(
@@ -62,5 +74,6 @@ async def submit_form(
             form_schema=form_schema,
             form=form,
             fields=fields,
+            errors=errors,
         ),
     )
