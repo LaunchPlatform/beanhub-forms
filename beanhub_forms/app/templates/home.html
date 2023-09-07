@@ -16,7 +16,7 @@
   {% else %}
     <ul>
       {% for form in form_doc.forms %}
-      <li>{{ form.name }}</li>
+      <li><a href="{{ url_for('submit_form', form_name=form.name) }}">{{ form.name }}</a></li>
       {% endfor %}
     </ul>
   {% endif %}
