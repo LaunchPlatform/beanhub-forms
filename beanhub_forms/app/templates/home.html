@@ -1,9 +1,23 @@
-{% if form_doc is none %}
-  <p>No form definitions found</p>
-{% else %}
-  <ul>
-    {% for form in form_doc.forms %}
-    <li>{{ form.name }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+{% extends "layout.html" %}
+
+{% block page_title %}
+  Forms
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block content %}
+  {% if form_doc is none %}
+    <p>No form definitions found</p>
+  {% else %}
+    <ul>
+      {% for form in form_doc.forms %}
+      <li>{{ form.name }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock content %}

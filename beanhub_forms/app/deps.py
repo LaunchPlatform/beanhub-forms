@@ -69,6 +69,7 @@ def get_templates(
     templates.env.globals["get_flashed_messages"] = get_flashed_messages
     templates.env.globals["csrf_token"] = lambda: csrf_token(request)
     templates.env.globals["constants"] = constants
+    templates.env.globals["settings"] = settings
     return templates
 
 
