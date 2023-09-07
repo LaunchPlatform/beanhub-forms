@@ -11,7 +11,7 @@ router = APIRouter()
 async def home(
     request: Request,
     templates: deps.Jinja2TemplatesDep,
-    form_schema: deps.FormSchema,
+    form_schema: deps.FormSchemaDep,
 ):
     return templates.TemplateResponse(
         "home.html",
