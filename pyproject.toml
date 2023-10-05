@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "beancount-forms"
+name = "beanhub-forms"
 version = "0.1.0"
 description = "Library for generating BeanHub's custom forms"
 authors = ["Fang-Pen Lin <fangpen@launchplatform.com>"]
