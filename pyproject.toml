@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "beancount-forms"
 version = "0.1.0"
-description = "Library for generating BeanHub's custom forms with a simple web app server capable of rendering and processing forms"
+description = "Library for generating BeanHub's custom forms"
 authors = ["Fang-Pen Lin <fangpen@launchplatform.com>"]
 license = "MIT"
 
