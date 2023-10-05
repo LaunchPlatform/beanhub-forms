@@ -3,26 +3,28 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@1.5.0
+  python: circleci/python@2.1.1
 
 jobs:
   test:
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/python:3.9.18
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
+          version: 3.9.18
       - run:
           name: Run test
           command: poetry run python -m pytest ./tests -svvvv
   build-and-publish:
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/python:3.9.18
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
+          version: 3.9.18
       - run:
           name: config
           command: |
