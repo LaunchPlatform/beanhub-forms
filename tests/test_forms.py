@@ -2,7 +2,7 @@ import typing
 
 import pytest
 from pytest_mock import MockFixture
-from starlette.datastructures import ImmutableMultiDict
+from multidict import MultiDict
 
 from beanhub_forms.data_types.form import AccountFormField
 from beanhub_forms.data_types.form import CurrencyFormField
@@ -23,7 +23,6 @@ def post_request(mocker: MockFixture) -> typing.Any:
     return request
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ", ".join(["fields", "kwargs", "form_data", "expected_errors"]),
     [
@@ -176,7 +175,7 @@ def post_request(mocker: MockFixture) -> typing.Any:
                 CurrencyFormField(name="currency", creatable=True, multiple=True),
             ],
             dict(accounts=[], currencies=[], files=[]),
-            ImmutableMultiDict(
+            MultiDict(
                 [
                     ("currency", "USD"),
                     ("currency", "btc"),
@@ -187,7 +186,7 @@ def post_request(mocker: MockFixture) -> typing.Any:
         ),
     ],
 )
-async def test_custom_form_validation(
+def test_custom_form_validation(
     post_request: typing.Any,
     fields: list[FormField],
     form_data: dict,
@@ -196,6 +195,6 @@ async def test_custom_form_validation(
 ):
     schema = FormSchema(name="add-contracting-hours", fields=fields, operations=[])
     CustomForm = make_custom_form(form_schema=schema, **kwargs)
-    form = CustomForm(post_request, ImmutableMultiDict(form_data))
-    await form.validate_on_submit()
+    form = CustomForm(MultiDict(form_data))
+    form.validate()
     assert form.errors == expected_errors

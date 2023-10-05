@@ -1,9 +1,10 @@
 import enum
+import typing
 
 import pydantic
 from pydantic import BaseModel
 from pydantic import conlist
-from pydantic import validator
+from pydantic import field_validator
 
 SLUG_REGEX = "^[a-z0-9]+(?:-[a-z0-9]+)*$"
 
@@ -30,46 +31,46 @@ class OperationType(enum.Enum):
 class FormFieldBase(FormBase):
     name: str = pydantic.Field(min_length=1, max_length=32)
     required: bool = False
-    default: str | None = None
-    display_name: str | None = pydantic.Field(None, min_length=1, max_length=64)
+    default: typing.Optional[str] = None
+    display_name: typing.Optional[str] = pydantic.Field(None, min_length=1, max_length=64)
 
 
 class StrFormField(FormFieldBase):
-    type: FieldType = pydantic.Field(FieldType.str, const=True)
+    type: typing.Literal[FieldType.str] = FieldType.str
 
 
 class NumberFormField(FormFieldBase):
-    type: FieldType = pydantic.Field(FieldType.number, const=True)
+    type: typing.Literal[FieldType.number] = FieldType.number
 
 
 class DateFormField(FormFieldBase):
-    type: FieldType = pydantic.Field(FieldType.date, const=True)
+    type: typing.Literal[FieldType.date] = FieldType.date
 
 
 class FileFormField(FormFieldBase):
-    type: FieldType = pydantic.Field(FieldType.file, const=True)
+    type: typing.Literal[FieldType.file] = FieldType.file
     creatable: bool = False
 
 
 class AccountFormField(FormFieldBase):
-    type: FieldType = pydantic.Field(FieldType.account, const=True)
+    type: typing.Literal[FieldType.account] = FieldType.account
     creatable: bool = False
 
 
 class CurrencyFormField(FormFieldBase):
-    type: FieldType = pydantic.Field(FieldType.currency, const=True)
+    type: typing.Literal[FieldType.currency] = FieldType.currency
     creatable: bool = False
     multiple: bool = False
 
 
-FormField = (
-    StrFormField
-    | NumberFormField
-    | DateFormField
-    | FileFormField
-    | AccountFormField
-    | CurrencyFormField
-)
+FormField = typing.Union[
+    StrFormField,
+    NumberFormField,
+    DateFormField,
+    FileFormField,
+    AccountFormField,
+    CurrencyFormField
+]
 
 
 class Operation(FormBase):
@@ -79,18 +80,19 @@ class Operation(FormBase):
 
 
 class CommitOptions(FormBase):
-    message: str | None = None
+    message: typing.Optional[str]= None
 
 
 class FormSchema(FormBase):
-    name: str = pydantic.Field(regex=SLUG_REGEX, min_length=1, max_length=32)
-    fields: conlist(FormField, max_items=32)
+    name: str = pydantic.Field(pattern=SLUG_REGEX, min_length=1, max_length=32)
+    fields: conlist(FormField, max_length=32)
     operations: list[Operation]
     auto_format: bool = True
-    commit: CommitOptions | None = None
-    display_name: str | None = pydantic.Field(None, min_length=1, max_length=64)
+    commit: typing.Optional[CommitOptions] = None
+    display_name: typing.Optional[str] = pydantic.Field(None, min_length=1, max_length=64)
 
-    @validator("fields")
+    @field_validator("fields")
+    @classmethod
     def check_field_name_uniqueness(cls, v: list[FormField]) -> list[FormField]:
         field_names = set()
         for field in v:
@@ -101,9 +103,10 @@ class FormSchema(FormBase):
 
 
 class FormDoc(FormBase):
-    forms: conlist(FormSchema, max_items=10)
+    forms: conlist(FormSchema, max_length=10)
 
-    @validator("forms")
+    @field_validator ("forms")
+    @classmethod
     def check_form_name_uniqueness(cls, v: list[FormSchema]) -> list[FormSchema]:
         form_names = set()
         for form in v:

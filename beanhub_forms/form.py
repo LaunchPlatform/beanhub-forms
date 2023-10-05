@@ -1,7 +1,6 @@
 import re
 import typing
 
-from starlette_wtf import StarletteForm
 from wtforms import DateField
 from wtforms import DecimalField
 from wtforms import Field
@@ -43,8 +42,9 @@ def make_custom_form(
     accounts: list[str],
     currencies: list[str],
     files: list[str],
-) -> typing.Type[StarletteForm]:
-    class CustomForm(StarletteForm):
+    form_base: typing.Type[Form] = Form,
+) -> typing.Type[Form]:
+    class CustomForm(form_base):
         pass
 
     for field in form_schema.fields:
