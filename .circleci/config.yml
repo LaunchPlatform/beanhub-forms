@@ -13,7 +13,6 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
-          version: 3.9.18
       - run:
           name: Run test
           command: poetry run python -m pytest ./tests -svvvv
@@ -24,7 +23,6 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: poetry
-          version: 3.9.18
       - run:
           name: config
           command: |
