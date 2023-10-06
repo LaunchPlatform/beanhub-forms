@@ -55,7 +55,7 @@ def test_render_error():
                     file="2023-10-05.bean",
                     new_file=True,
                     type=OperationType.append,
-                    content="; name=BeanHub",
+                    content="; name=BeanHub\n",
                 )
             ],
         )
@@ -65,7 +65,9 @@ def test_process_form(
     tmp_path: pathlib.Path,
     form_schema: FormSchema,
     form_data: dict,
-    expected_updates: list[str],
+    expected_updates: list[FileUpdate],
 ):
     updates = process_form(form_schema, form_data=form_data, beancount_dir=tmp_path)
+    for expected_update in expected_updates:
+        expected_update.file = str(tmp_path / expected_update.file)
     assert updates == expected_updates

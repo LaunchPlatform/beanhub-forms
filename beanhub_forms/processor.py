@@ -71,6 +71,7 @@ def process_form(
                     file=str(file_path),
                     content=text,
                     new_file=file_path in added_files,
+                    type=operation.type,
                 )
             )
         else:
