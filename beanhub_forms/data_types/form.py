@@ -14,7 +14,7 @@ class FormBase(BaseModel):
 
 
 @enum.unique
-class FieldType(enum.Enum):
+class FieldType(str, enum.Enum):
     str = "str"
     number = "number"
     date = "date"
@@ -24,7 +24,7 @@ class FieldType(enum.Enum):
 
 
 @enum.unique
-class OperationType(enum.Enum):
+class OperationType(str, enum.Enum):
     append = "append"
 
 
@@ -32,7 +32,9 @@ class FormFieldBase(FormBase):
     name: str = pydantic.Field(min_length=1, max_length=32)
     required: bool = False
     default: typing.Optional[str] = None
-    display_name: typing.Optional[str] = pydantic.Field(None, min_length=1, max_length=64)
+    display_name: typing.Optional[str] = pydantic.Field(
+        None, min_length=1, max_length=64
+    )
 
 
 class StrFormField(FormFieldBase):
@@ -69,7 +71,7 @@ FormField = typing.Union[
     DateFormField,
     FileFormField,
     AccountFormField,
-    CurrencyFormField
+    CurrencyFormField,
 ]
 
 
@@ -80,7 +82,7 @@ class Operation(FormBase):
 
 
 class CommitOptions(FormBase):
-    message: typing.Optional[str]= None
+    message: typing.Optional[str] = None
 
 
 class FormSchema(FormBase):
@@ -89,7 +91,9 @@ class FormSchema(FormBase):
     operations: list[Operation]
     auto_format: bool = True
     commit: typing.Optional[CommitOptions] = None
-    display_name: typing.Optional[str] = pydantic.Field(None, min_length=1, max_length=64)
+    display_name: typing.Optional[str] = pydantic.Field(
+        None, min_length=1, max_length=64
+    )
 
     @field_validator("fields")
     @classmethod
@@ -105,7 +109,7 @@ class FormSchema(FormBase):
 class FormDoc(FormBase):
     forms: conlist(FormSchema, max_length=10)
 
-    @field_validator ("forms")
+    @field_validator("forms")
     @classmethod
     def check_form_name_uniqueness(cls, v: list[FormSchema]) -> list[FormSchema]:
         form_names = set()

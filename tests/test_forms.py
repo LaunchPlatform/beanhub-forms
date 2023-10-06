@@ -1,29 +1,27 @@
 import io
 import textwrap
 import typing
-import yaml
 
 import pytest
+import yaml
 from multidict import MultiDict
-from pydantic import TypeAdapter
 
 from beanhub_forms.data_types.form import AccountFormField
 from beanhub_forms.data_types.form import CurrencyFormField
 from beanhub_forms.data_types.form import DateFormField
 from beanhub_forms.data_types.form import FileFormField
+from beanhub_forms.data_types.form import FormDoc
 from beanhub_forms.data_types.form import FormField
 from beanhub_forms.data_types.form import FormSchema
-from beanhub_forms.data_types.form import FormDoc
 from beanhub_forms.data_types.form import NumberFormField
 from beanhub_forms.data_types.form import StrFormField
 from beanhub_forms.form import make_custom_form
 
 
-
-
 @pytest.fixture
 def sample_form_doc() -> str:
-    return textwrap.dedent("""\
+    return textwrap.dedent(
+        """\
     forms:
     - name: add-xyz-hours
       display_name: "Hours spent on XYZ contracting project"
@@ -52,7 +50,8 @@ def sample_form_doc() -> str:
           {{ date }} * {{ narration | tojson }}
             Assets:AccountsReceivable:Contracting:XYZ      {{  hours }} XYZ.HOUR @ {{ rate }} USD
             Income:Contracting:XYZ      
-    """)
+    """
+    )
 
 
 @pytest.mark.parametrize(
@@ -233,4 +232,4 @@ def test_custom_form_validation(
 
 def test_parse_form_doc(sample_form_doc: str):
     payload = yaml.safe_load(io.StringIO(sample_form_doc))
-    TypeAdapter(FormDoc).validate_python(payload)
+    FormDoc.model_validate(payload)
