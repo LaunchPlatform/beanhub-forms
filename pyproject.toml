@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "beanhub-forms"
-version = "0.1.2"
+version = "0.1.3"
 description = "Library for generating BeanHub's custom forms"
 authors = ["Fang-Pen Lin <fangpen@launchplatform.com>"]
 license = "MIT"
