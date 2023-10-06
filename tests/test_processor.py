@@ -105,7 +105,7 @@ def test_process_form(
 @pytest.mark.parametrize(
     "form_schema, form_data, expected_errors",
     [
-        (
+        pytest.param(
             FormSchema(
                 name="my-form",
                 fields=[
@@ -121,8 +121,9 @@ def test_process_form(
             ),
             dict(),
             ["Invalid path '../../etc/password'"],
+            id="relative-path",
         ),
-        (
+        pytest.param(
             FormSchema(
                 name="my-form",
                 fields=[
@@ -138,6 +139,7 @@ def test_process_form(
             ),
             dict(),
             ["Invalid path '/etc/password'"],
+            id="abs-escaping-path",
         ),
     ],
 )
