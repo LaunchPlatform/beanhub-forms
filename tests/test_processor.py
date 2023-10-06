@@ -1,6 +1,15 @@
+import datetime
+import pathlib
+
 import pytest
 from jinja2.exceptions import TemplateAssertionError
 
+from beanhub_forms.data_types.form import DateFormField
+from beanhub_forms.data_types.form import FormSchema
+from beanhub_forms.data_types.form import Operation
+from beanhub_forms.data_types.form import OperationType
+from beanhub_forms.data_types.form import StrFormField
+from beanhub_forms.data_types.processor import FileUpdate
 from beanhub_forms.processor import process_form
 from beanhub_forms.processor import render
 from beanhub_forms.processor import RenderError
@@ -22,5 +31,41 @@ def test_render_error():
     assert isinstance(error.value.original_exc, TemplateAssertionError)
 
 
-def test_process_form():
-    process_form()
+@pytest.mark.parametrize(
+    "form_schema, form_data, expected_updates",
+    [
+        (
+            FormSchema(
+                name="my-form",
+                fields=[
+                    DateFormField(name="date"),
+                    StrFormField(name="name"),
+                ],
+                operations=[
+                    Operation(
+                        file="{{ date }}.bean",
+                        type=OperationType.append,
+                        content="; name={{ name }}",
+                    )
+                ],
+            ),
+            dict(date=datetime.date(2023, 10, 5), name="BeanHub"),
+            [
+                FileUpdate(
+                    file="2023-10-05.bean",
+                    new_file=True,
+                    type=OperationType.append,
+                    content="; name=BeanHub",
+                )
+            ],
+        )
+    ],
+)
+def test_process_form(
+    tmp_path: pathlib.Path,
+    form_schema: FormSchema,
+    form_data: dict,
+    expected_updates: list[str],
+):
+    updates = process_form(form_schema, form_data=form_data, beancount_dir=tmp_path)
+    assert updates == expected_updates
