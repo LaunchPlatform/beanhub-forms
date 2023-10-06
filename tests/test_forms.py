@@ -1,8 +1,11 @@
+import io
+import textwrap
 import typing
+import yaml
 
 import pytest
-from pytest_mock import MockFixture
 from multidict import MultiDict
+from pydantic import TypeAdapter
 
 from beanhub_forms.data_types.form import AccountFormField
 from beanhub_forms.data_types.form import CurrencyFormField
@@ -10,17 +13,46 @@ from beanhub_forms.data_types.form import DateFormField
 from beanhub_forms.data_types.form import FileFormField
 from beanhub_forms.data_types.form import FormField
 from beanhub_forms.data_types.form import FormSchema
+from beanhub_forms.data_types.form import FormDoc
 from beanhub_forms.data_types.form import NumberFormField
 from beanhub_forms.data_types.form import StrFormField
 from beanhub_forms.form import make_custom_form
 
 
+
+
 @pytest.fixture
-def post_request(mocker: MockFixture) -> typing.Any:
-    request = mocker.Mock()
-    request.state = object()
-    request.method = "POST"
-    return request
+def sample_form_doc() -> str:
+    return textwrap.dedent("""\
+    forms:
+    - name: add-xyz-hours
+      display_name: "Hours spent on XYZ contracting project"
+      fields:
+      - name: date
+        type: date
+        display_name: "Date"
+        required: true
+      - name: hours
+        type: number
+        display_name: "Hours"
+        required: true
+      - name: rate
+        type: number
+        display_name: "Rate (USD)"
+        default: "300"
+        required: true
+      - name: narration
+        type: str
+        default: "Hours spent on the software development project for client XYZ"
+        display_name: "Narration"
+      operations:
+      - type: append
+        file: "books/{{ date.year }}.bean"
+        content: |
+          {{ date }} * {{ narration | tojson }}
+            Assets:AccountsReceivable:Contracting:XYZ      {{  hours }} XYZ.HOUR @ {{ rate }} USD
+            Income:Contracting:XYZ      
+    """)
 
 
 @pytest.mark.parametrize(
@@ -187,7 +219,6 @@ def post_request(mocker: MockFixture) -> typing.Any:
     ],
 )
 def test_custom_form_validation(
-    post_request: typing.Any,
     fields: list[FormField],
     form_data: dict,
     kwargs: dict,
@@ -198,3 +229,8 @@ def test_custom_form_validation(
     form = CustomForm(MultiDict(form_data))
     form.validate()
     assert form.errors == expected_errors
+
+
+def test_parse_form_doc(sample_form_doc: str):
+    payload = yaml.safe_load(io.StringIO(sample_form_doc))
+    TypeAdapter(FormDoc).validate_python(payload)
