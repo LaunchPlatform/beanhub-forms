@@ -4,6 +4,7 @@ version = "0.1.3"
 description = "Library for generating and processing BeanHub's custom forms"
 authors = ["Fang-Pen Lin <fangpen@launchplatform.com>"]
 license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
