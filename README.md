@@ -47,3 +47,21 @@ Then, the user can use the rendered form to input repeating similar Beancount en
   <a href="https://beanhub.io"><img src="https://github.com/LaunchPlatform/beanhub-forms/raw/master/assets/forms-screenshot.png?raw=true" alt="BeanHub Forms screenshot" /></a>
 </p>
 
+As you can see, the append operation with Jinja2 template as the content is defined in the form doc schema:
+
+```yaml
+- type: append
+  file: "books/{{ date.year }}.bean"
+  content: |
+    {{ date }} * {{ narration | tojson }}
+      Assets:AccountsReceivable:Contracting:XYZ      {{  hours }} XYZ.HOUR @ {{ rate }} USD
+      Income:Contracting:XYZ
+```
+
+When you submit the form, the form input data will be used for rendering the template and appending the result to the target file.
+
+```beancount
+2023-10-11 * "Hours spent on the software development project for client XYZ"
+  Assets:AccountsReceivable:Contracting:XYZ      12 XYZ.HOUR @ 300 USD
+  Income:Contracting:XYZ
+```
