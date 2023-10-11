@@ -35,11 +35,15 @@ forms:
         Income:Contracting:XYZ
 ```
 
-And then use tools like beanhub-cli command to launch a web app server locally:
+And then use tools like [beanhub-cli](https://github.com/LaunchPlatform/beanhub-cli) command to launch a web app server locally:
 
-```
+```bash
 bh form server
 ```
 
 Then, the user can use the rendered form to input repeating similar Beancount entries easily.
+
+<p align="center">
+  <a href="https://beanhub.io"><img src="https://github.com/LaunchPlatform/beanhub-forms/raw/master/assets/forms-screenshot.png?raw=true" alt="BeanHub Forms screenshot" /></a>
+</p>
 
