@@ -68,3 +68,24 @@ When you submit the form, the form input data will be used for rendering the tem
 
 The file name `file` can also be a Jinja2 template. The file name "books/{{ date.year }}.bean" with `2023` the input value in the form will end up as `books/2023.bean`.
 This allows you to organize entries by dates or other variables into different files and folders easily.
+
+# Sponsor
+
+<p align="center">
+  <a href="https://beanhub.io"><img src="https://github.com/LaunchPlatform/beanhub-forms/raw/master/assets/beanhub.svg?raw=true" alt="BeanHub logo" /></a>
+</p>
+
+A modern accounting book service based on the most popular open source version control system [Git](https://git-scm.com/) and text-based double entry accounting book software [Beancount](https://beancount.github.io/docs/index.html).
+
+
+## Install
+
+This library provides schema definition of the forms and the libraries for generating WTForms plus processing the form data.
+For most users, you don't need to install beanhub-forms.
+You can install [beanhub-cli](https://github.com/LaunchPlatform/beanhub-cli) instead if you only want to use it.
+
+To install this library, simply run
+
+```bash
+pip install beanhub-forms
+```
