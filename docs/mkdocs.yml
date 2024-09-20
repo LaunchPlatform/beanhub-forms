@@ -1,0 +1,41 @@
+site_name: BeanHub Forms
+repo_url: https://github.com/launchplatform/beanhub-forms
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  palette:
+    primary: deep purple
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.prune
+    - navigation.footer
+  custom_dir: overrides
+  icon:
+    repo: fontawesome/brands/github
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+nav:
+  - 'BeanHub Forms': 'index.md'
+  - 'Getting Started': 'getting-started.md'
+  - 'Scheme': 'scheme.md'
+copyright: Copyright &copy; 2024 Launch Platform LLC
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/launchplatform
+    - icon: fontawesome/solid/house
+      link: https://beanhub.io
+  generator: false
+  analytics:
+    provider: custom
